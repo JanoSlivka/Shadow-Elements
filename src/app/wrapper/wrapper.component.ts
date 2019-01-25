@@ -32,8 +32,8 @@ export class WrapperComponent implements OnInit, AfterViewInit {
         this.updateChildContent();
     }
 
-    changeInputData() {
-        this.wrapperData = 'Changed Data';
+    changeInputData(data) {
+        this.wrapperData = data;
         this.updateChildContent();
     }
 

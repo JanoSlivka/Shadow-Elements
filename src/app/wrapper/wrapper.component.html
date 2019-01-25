@@ -1,5 +1,6 @@
 <h3>Above slot</h3>
 <p> {{ wrapperData }} </p>
 <slot (slotchange)="slotChange($event)"></slot>
-<button (click)="changeInputData()">Change Data</button>
+<button (click)="changeInputData('change data')">Change Data</button>
+<button (click)="changeInputData('change back')">Change Back</button>
 <h3>Under slot</h3>
