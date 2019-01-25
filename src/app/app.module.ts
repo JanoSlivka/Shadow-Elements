@@ -1,18 +1,38 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, ChangeDetectorRef } from '@angular/core';
 
-import { AppComponent } from './app.component';
-import { WrapperModule } from './wrapper/wrapper.module';
+import { Injector } from '@angular/core';
+import { createCustomElement } from '@angular/elements';
+
+import { WrapperComponent } from './wrapper/wrapper.component';
+import { SlotComponent } from './slot/slot.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule, WrapperModule
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [],
-  bootstrap: [AppComponent]
+    imports: [
+        BrowserModule
+    ],
+    declarations: [
+        SlotComponent,
+        WrapperComponent
+    ],
+    entryComponents: [
+        SlotComponent,
+        WrapperComponent
+    ],
+    providers: [],
 })
-export class AppModule { }
+export class AppModule {
+    constructor(private injector: Injector) {}
+
+    ngDoBootstrap() {
+        const slotComponent = createCustomElement(SlotComponent, {
+            injector: this.injector
+        });
+        const wrapperComponent = createCustomElement(WrapperComponent, {
+            injector: this.injector
+        });
+
+        customElements.define('my-slot', slotComponent);
+        customElements.define('my-wrapper', wrapperComponent);
+    }
+}
