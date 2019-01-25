@@ -1,52 +1,62 @@
-import { Component, OnInit, ViewEncapsulation, Input, AfterViewInit } from '@angular/core';
-import { NgElement, WithProperties } from '@angular/elements';
-
-declare global {
-    interface HTMLElementTagNameMap {
-        'my-slot': NgElement & WithProperties<{ setInput(data: any): void }>;
-    }
-}
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    OnInit,
+    ViewEncapsulation,
+    ChangeDetectorRef,
+} from '@angular/core';
 
 @Component({
     templateUrl: './wrapper.component.html',
     styleUrls: ['./wrapper.component.scss'],
-    encapsulation: ViewEncapsulation.ShadowDom
+    encapsulation: ViewEncapsulation.ShadowDom,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WrapperComponent implements OnInit, AfterViewInit {
 
-    private data;
+    @Input('wrapper-data') wrapperData: any;
+    private mySlotEl = document.querySelector('my-slot');
 
-    @Input('wrapper-data') set wrapperData(input) {
-        console.log('wrapper input data', input)
-        this.data = input;
-    };
-    get wrapperData() {
-        return this.data;
+    constructor(
+        private cd: ChangeDetectorRef
+    ) {}
+
+    ngOnInit() {
+        console.log(this.wrapperData);
     }
-
-    constructor() { }
-
-    ngOnInit() {}
 
     ngAfterViewInit() {
         this.updateChildContent();
+        this.mySlotEl.addEventListener('action', this.mySlotAction.bind(this));
+    }
+
+    ngOnDestroy() {
+        this.mySlotEl.removeEventListener('action', this.mySlotAction.bind(this));
     }
 
     changeInputData(data) {
         this.wrapperData = data;
         this.updateChildContent();
+        this.cd.detectChanges();
     }
 
     slotChange($event) {
         const assigned = $event.target.assignedNodes();
         if (assigned.length > 0) {
-            console.log('shotchange', assigned[0]);
+            console.log('my slot changed', assigned[0]);
         }
     }
 
+    private mySlotAction(event) {
+        console.log(event.detail);
+        this.cd.detectChanges();
+    }
+
     private updateChildContent() {
-        const mySlot = document.querySelector('my-slot');
-        if (mySlot) mySlot.setInput(this.wrapperData);
+        if (!this.mySlotEl) return;
+        this.mySlotEl.setInput(this.wrapperData);
     }
 
 }

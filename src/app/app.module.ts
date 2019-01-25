@@ -1,11 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ChangeDetectorRef } from '@angular/core';
-
-import { Injector } from '@angular/core';
-import { createCustomElement } from '@angular/elements';
+import { NgModule, Injector, EventEmitter } from '@angular/core';
+import { createCustomElement, NgElement, WithProperties } from '@angular/elements';
 
 import { WrapperComponent } from './wrapper/wrapper.component';
 import { SlotComponent } from './slot/slot.component';
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'my-slot': NgElement & WithProperties<{
+            setInput(data: any): void,
+            action: EventEmitter<string>
+        }>;
+        'my-wrapper': NgElement & WithProperties<{
+            wrapperData: any
+        }>;
+    }
+}
 
 @NgModule({
     imports: [

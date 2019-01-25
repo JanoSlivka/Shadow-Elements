@@ -1,23 +1,40 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    ChangeDetectionStrategy,
+    Component,
+    Input,
+    OnInit,
+    Output,
+    EventEmitter,
+    HostListener
+} from '@angular/core';
 
 @Component({
     templateUrl: './slot.component.html',
     styleUrls: ['./slot.component.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SlotComponent implements OnInit {
 
+    @Input() setInput = this.setInputData.bind(this);
+    @Output() action = new EventEmitter<string>();
+
+    clicks: number = 0;
     inputData: any = 'default input data';
 
-    constructor(private cd: ChangeDetectorRef
-    ) {}
+    constructor(
+        private cd: ChangeDetectorRef
+    ) { }
 
-    ngOnInit() {
+    ngOnInit() {}
+
+    @HostListener('click')
+    handleClick() {
+        this.clicks++;
+        this.action.emit('clicks: ' + this.clicks);
     }
 
-    @Input()
-    // Important to use arrow function, to preserve this context
-    setInput = (data) => {
+    private setInputData(data) {
         this.inputData = data;
         this.cd.detectChanges();
     }
