@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ShadowElements</title>
+    <base href="/">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+    <link rel="icon"
+          type="image/x-icon"
+          href="dist/favicon.ico">
+<link rel="stylesheet" href="dist/styles.css"></head>
+<body>
+    <my-wrapper wrapper-data="Data to inject">
+        <h5>My wrapper</h5>
+        <my-slot></my-slot>
+    </my-wrapper>
+    <h6>Custom element under this should not receive or emit any data</h6>
+    <my-slot></my-slot>
+<script defer type="text/javascript"
+        src="dist/elements/kros-custom-elements.js"></script>
+</body>
+
+</html>

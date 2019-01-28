@@ -18,6 +18,7 @@ import {
 export class WrapperComponent implements AfterViewInit, OnDestroy, OnInit {
 
     @Input('wrapper-data') wrapperData: any;
+    clicks: 0;
     private mySlotEl = document.querySelector('my-wrapper > my-slot');
 
     constructor(
@@ -56,6 +57,7 @@ export class WrapperComponent implements AfterViewInit, OnDestroy, OnInit {
 
     private mySlotAction(event) {
         console.log(event.detail);
+        this.clicks = event.detail;
         this.cd.detectChanges();
     }
 
