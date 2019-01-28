@@ -7,9 +7,9 @@ import { SlotComponent } from './slot/slot.component';
 
 declare global {
     interface HTMLElementTagNameMap {
-        'my-slot': NgElement & WithProperties<{
-            setInput(data: any): void,
-            action: EventEmitter<string>
+        'my-wrapper > my-slot': NgElement & WithProperties<{
+            action: EventEmitter<string>,
+            setInput(data: any): void
         }>;
         'my-wrapper': NgElement & WithProperties<{
             wrapperData: any

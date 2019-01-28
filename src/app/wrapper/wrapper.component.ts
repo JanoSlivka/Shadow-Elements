@@ -1,11 +1,12 @@
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     Input,
     OnInit,
-    ViewEncapsulation,
-    ChangeDetectorRef,
+    OnDestroy,
+    ViewEncapsulation
 } from '@angular/core';
 
 @Component({
@@ -14,10 +15,10 @@ import {
     encapsulation: ViewEncapsulation.ShadowDom,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WrapperComponent implements OnInit, AfterViewInit {
+export class WrapperComponent implements AfterViewInit, OnDestroy, OnInit {
 
     @Input('wrapper-data') wrapperData: any;
-    private mySlotEl = document.querySelector('my-slot');
+    private mySlotEl = document.querySelector('my-wrapper > my-slot');
 
     constructor(
         private cd: ChangeDetectorRef
@@ -29,11 +30,15 @@ export class WrapperComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         this.updateChildContent();
-        this.mySlotEl.addEventListener('action', this.mySlotAction.bind(this));
+        if (this.mySlotEl) {
+            this.mySlotEl.addEventListener('action', this.mySlotAction.bind(this));
+        }
     }
 
     ngOnDestroy() {
-        this.mySlotEl.removeEventListener('action', this.mySlotAction.bind(this));
+        if (this.mySlotEl) {
+            this.mySlotEl.removeEventListener('action', this.mySlotAction.bind(this));
+        }
     }
 
     changeInputData(data) {
